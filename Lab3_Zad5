@@ -1,0 +1,30 @@
+using UnityEngine;
+using System.Collections.Generic;
+
+public class CubeSpawner : MonoBehaviour
+{
+    public int lb_Cubow = 10;    
+    private float size = 10f;    
+
+    void Start()
+    {
+        HashSet<Vector3> busy = new HashSet<Vector3>();
+
+        for (int i = 0; i < lb_Cubow; i++)
+        {
+            Vector3 poz;
+            do
+            {
+                float x = Random.Range(-size / 2f, size / 2f);
+                float z = Random.Range(-size / 2f, size / 2f);
+                poz = new Vector3(Mathf.Round(x), 0.5f, Mathf.Round(z));
+            }
+            while (busy.Contains(poz));
+
+            busy.Add(poz);
+
+            GameObject cube = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            cube.transform.position = poz;
+        }
+    }
+}
