@@ -1,0 +1,59 @@
+﻿using UnityEngine;
+
+public class Lab3_Zad2 : MonoBehaviour
+{
+    public float speed = 2f;
+    private Vector3 poz_start;
+    private Vector3 poz_cel;
+    private bool ruch = true;
+    private int indeks = 0; 
+    private Vector3[] wierzcholk;   
+    private const float eps = 0.001f;
+    private const float bok = 10f;
+
+
+    void Start()
+    {
+        poz_start = transform.position;
+        wierzcholki = new Vector3[4];
+        wierzcholki[0] = poz_start + Vector3.right * bok;                     
+        wierzcholki[1] = wierzcholki[0] + Vector3.forward * bok;                   
+        wierzcholki[2] = wierzcholki[1] + Vector3.left * bok;                     
+        wierzcholki[3] = wierzcholki[2] + Vector3.back * bok;                       
+        poz_cel = wierzcholki[indeks];
+        Forward();
+    }
+
+    void Update()
+    {
+        if (ruch)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, poz_cel, speed * Time.deltaTime);
+
+            if (Vector3.Distance(transform.position, poz_cel) <= eps)
+            {
+                transform.position = poz_cel;
+                indeks = (indeks + 1) % wierzcholki.Length;
+                poz_start = transform.position;
+                poz_cel = wierzcholki[indeks];
+                Forward();
+            }
+        }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, poz_start, speed * Time.deltaTime);
+            if (Vector3.Distance(transform.position, poz_start) <= eps)
+            {
+                ruch = true;
+            }
+        }
+    }
+    private void Forward()
+    {
+        Vector3 kierunek = poz_cel - transform.position;
+        if (kierunek.sqrMagnitude > 0.0001f)
+        {
+            transform.rotation = Quaternion.LookRotation(kierunek.normalized, Vector3.up);
+        }
+    }
+}
