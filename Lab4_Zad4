@@ -1,0 +1,71 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
+
+public class Lab4_Zad1 : MonoBehaviour
+{
+    List<Vector3> positions = new List<Vector3>();
+    public float delay = 3.0f;
+    int objectCounter = 0;
+    // obiekt do generowania
+    public GameObject block;
+    public int iloscKlockow = 10;
+    public Material[] materials;
+    void Start()
+    {
+        // w momecie uruchomienia generuje 10 kostek w losowych miejscach
+        List<int> poz_x = new List<int>(Enumerable.Range(0, 20).OrderBy(x => Guid.NewGuid()).Take(10));
+        List<int> poz_z = new List<int>(Enumerable.Range(0, 20).OrderBy(x => Guid.NewGuid()).Take(10));
+
+        for (int i = 0; i < 10; i++)
+        {
+            this.positions.Add(new Vector3(poz_x[i], 5, poz_z[i]));
+        }
+        foreach (Vector3 elem in positions)
+        {
+            Debug.Log(elem);
+        }
+        Renderer rend = GetComponent<Renderer>();
+        if (rend != null)
+        {
+            Bounds bounds = rend.bounds;
+            for (int i = 0; i < iloscKlockow; i++)
+            {
+                float x = UnityEngine.Random.Range(bounds.min.x, bounds.max.x);
+                float z = UnityEngine.Random.Range(bounds.min.z, bounds.max.z);
+                float y = bounds.max.y + 0.5f;
+
+                positions.Add(new Vector3(x, y, z));
+            }
+        }
+        // uruchamiamy coroutine
+        StartCoroutine(GenerujKlocek());
+    }
+
+    void Update()
+    {
+
+    }
+
+    IEnumerator GenerujKlocek()
+    {
+        Debug.Log("wywolano coroutine");
+        foreach (Vector3 pos in positions)
+        {
+            GameObject klocek = Instantiate(this.block, this.positions.ElementAt(this.objectCounter++), Quaternion.identity);
+
+
+            if (materials != null && materials.Length > 0)
+            {
+                Material losowyMat = materials[UnityEngine.Random.Range(0, materials.Length)];
+                klocek.GetComponent<Renderer>().material = losowyMat;
+            }
+
+            yield return new WaitForSeconds(this.delay);
+        }
+
+        StopCoroutine(GenerujKlocek());
+    }
+}
