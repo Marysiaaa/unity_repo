@@ -1,0 +1,38 @@
+
+using UnityEngine;
+
+public class Lab3_zad1 : MonoBehaviour
+{
+    public float speed = 2f;
+    private Vector3 poz_start;
+    private Vector3 poz_cel;
+    private bool ruch = true;
+
+    void Start()
+    {
+        poz_start = transform.position;
+        poz_cel = poz_start + Vector3.right * 10f;
+    }
+
+    void Update()
+    {
+        if (ruch)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, poz_cel, speed * Time.deltaTime);
+            if (transform.position == poz_cel)
+            {
+                ruch = false;
+            }
+
+        }
+        else
+        {
+            transform.position = Vector3.MoveTowards(transform.position, poz_start, speed * Time.deltaTime);
+            if (transform.position == poz_start)
+            {
+                ruch = true;
+            }
+
+        }
+    }
+}
