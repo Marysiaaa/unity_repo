@@ -1,0 +1,18 @@
+using UnityEngine;
+
+public class Lab3_Zad6 : MonoBehaviour
+{
+    public Transform target;
+    private Vector3 velocity = Vector3.zero;
+    public float t = 0.3f;
+
+
+    void Update()
+    {
+        transform.position = Vector3.SmoothDamp(transform.position,target.position,ref velocity,t);
+
+        transform.position = Vector3.Lerp(transform.position, target.position, 0.05f);
+
+        transform.position = Vector3.Slerp(transform.position, target.position, 0.05f);
+    }
+}
