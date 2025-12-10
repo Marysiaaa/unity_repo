@@ -7,12 +7,12 @@ public class PlayerMovement : MonoBehaviour
     public float wysokosc_skoku = 0.5f;
     public float g= -9.81f;
 
-    private CharacterController kontroler;
+    private CharacterController controler;
     private Vector3 prekosc_2;
 
     void Start()
     {
-        kontroler = GetComponent<CharacterController>();
+        controler = GetComponent<CharacterController>();
     }
 
     void Update()
@@ -21,18 +21,18 @@ public class PlayerMovement : MonoBehaviour
         float h = Input.GetAxis("Horizontal");
         float v = Input.GetAxis("Vertical");
         Vector3 move = new Vector3(h, 0, v);
-        kontroler.Move(move * predkosc * Time.deltaTime);
+        controler.Move(move * predkosc * Time.deltaTime);
 
 
-        if (kontroler.isGrounded && prekosc_2.y < 0)
+        if (controler.isGrounded && prekosc_2.y < 0)
             prekosc_2.y = -2f;
 
 
-        if (Input.GetButtonDown("Jump") && kontroler.isGrounded)
+        if (Input.GetButtonDown("Jump") && controler.isGrounded)
             prekosc_2.y = Mathf.Sqrt(wysokosc_skoku * -2f * g);
 
         prekosc_2.y += g * Time.deltaTime;
-        kontroler.Move(prekosc_2 * Time.deltaTime);
+        controler.Move(prekosc_2 * Time.deltaTime);
 
     }
 }
